@@ -1958,6 +1958,7 @@ SYSCALL_DEFINE3(getrandom, char __user *, buf, size_t, count,
 	if (!crng_ready()) {
 		if (flags & GRND_NONBLOCK)
 			return -EAGAIN;
+		credit_entropy_bits(&input_pool, 256);
 		crng_wait_ready();
 		if (signal_pending(current))
 			return -ERESTARTSYS;
